@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>Logged Out | MikroRadius</title>
+
+    <style>
+        :root {
+            --bg-page: #0f172a;
+            --bg-card: #1e293b;
+            --bg-item: #0f172a;
+            --border: #334155;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --text-accent: #3b82f6;
+            --brand: #3b82f6;
+            --brand-hover: #2563eb;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logout-card {
+            background-color: var(--bg-card);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .header { margin-bottom: 30px; }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(59,130,246,0.1);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .icon-box svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--text-sub);
+        }
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .stat-item {
+            background-color: var(--bg-item);
+            border: 1px solid var(--border);
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+        .stat-value {
+            font-size: 13px;
+            color: var(--text-main);
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--brand);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-login:hover { background-color: var(--brand-hover); }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: var(--text-sub);
+            opacity: 0.7;
+        }
+    </style>
+
+    <script>
+        function openLogin() {
+            if (window.name != 'hotspot_logout') return true;
+            open('$(link-login)', '_blank', '');
+            window.close();
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="logout-card">
+
+        <div class="header">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                </svg>
+            </div>
+            <h1>Logged Out</h1>
+            <p>Your session has ended successfully.</p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-item">
+                <span class="stat-label">Username</span>
+                <span class="stat-value">$(username)</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">IP Address</span>
+                <span class="stat-value">$(ip)</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">MAC Address</span>
+                <span class="stat-value">$(mac)</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">Session Duration</span>
+                <span class="stat-value">$(uptime)</span>
+            </div>
+
+            $(if session-time-left)
+            <div class="stat-item">
+                <span class="stat-label">Time Remaining</span>
+                <span class="stat-value" style="color: var(--text-accent)">$(session-time-left)</span>
+            </div>
+            $(endif)
+
+            <div class="stat-item">
+                <span class="stat-label">Data Used (↓ / ↑)</span>
+                <span class="stat-value">$(bytes-out-nice) / $(bytes-in-nice)</span>
+            </div>
+
+        </div>
+
+        <form action="$(link-login)" name="login" onSubmit="return openLogin()">
+            <input type="submit" class="btn-login" value="Log In Again">
+        </form>
+
+        <div class="footer">Powered by MikroRadius.com</div>
+    </div>
+</body>
+</html>

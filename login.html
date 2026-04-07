@@ -306,12 +306,13 @@
 
         function openScanner() {
             var targetUrl = "https://qr.mikroradius.com/";
-            var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
-            if (isAndroid) {
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.indexOf("android") > -1) {
+                // Force open in Chrome, breaking out of captive portal mini-browser
                 window.location.href = "intent://qr.mikroradius.com/#Intent;scheme=https;package=com.android.chrome;end";
             } else {
-                window.open(targetUrl, '_system');
-                window.location.href = targetUrl;
+                // iOS: open in a new Safari tab, keeps login page intact
+                window.open(targetUrl, "_blank");
             }
         }
     </script>

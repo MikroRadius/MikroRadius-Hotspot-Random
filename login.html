@@ -210,6 +210,123 @@
             font-size: 12px;
             color: var(--text-sub);
         }
+
+        /* ===== MAC WARNING MODAL ===== */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-backdrop.open { display: flex; }
+        .modal {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .modal-header { padding: 24px 24px 0; text-align: center; }
+        .modal-icon {
+            width: 64px; height: 64px;
+            background: rgba(239,68,68,0.12);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .modal-icon svg { width: 32px; height: 32px; fill: #ef4444; }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+        .modal-subtitle { font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
+        .modal-subtitle strong { color: #fca5a5; }
+        .device-tabs { display: flex; gap: 8px; padding: 0 24px; margin-bottom: 20px; }
+        .device-tab {
+            flex: 1; padding: 10px 6px;
+            font-size: 12px; font-weight: 600;
+            color: #94a3b8;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 6px;
+        }
+        .device-tab svg { width: 22px; height: 22px; fill: #94a3b8; transition: fill 0.2s; }
+        .device-tab.active { background: rgba(59,130,246,0.15); border-color: #3b82f6; color: #3b82f6; }
+        .device-tab.active svg { fill: #3b82f6; }
+        .guide-panel { display: none; padding: 0 24px 8px; }
+        .guide-panel.active { display: block; }
+        .guide-step { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+        .step-num {
+            min-width: 28px; height: 28px;
+            background: rgba(59,130,246,0.2);
+            border: 1px solid rgba(59,130,246,0.4);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; color: #3b82f6;
+            flex-shrink: 0; margin-top: 2px;
+        }
+        .step-body { flex: 1; }
+        .step-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .step-desc { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+        .step-desc code {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 1px 6px; border-radius: 4px;
+            font-size: 11px; color: #38bdf8;
+        }
+        .mockup {
+            background: #0f172a; border: 1px solid #334155;
+            border-radius: 10px; padding: 10px; margin-top: 8px;
+        }
+        .mockup-bar {
+            background: #1e293b; border-radius: 6px;
+            padding: 8px 10px; margin-bottom: 6px;
+            display: flex; align-items: center;
+            justify-content: space-between;
+            color: #fff; font-size: 12px; font-weight: 500;
+        }
+        .mockup-row {
+            background: #1e293b; border-radius: 6px;
+            padding: 8px 10px; margin-bottom: 6px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .mockup-label { font-size: 11px; color: #94a3b8; }
+        .mockup-value { font-size: 11px; color: #fff; font-weight: 500; }
+        .mockup-value.hl { color: #3b82f6; background: rgba(59,130,246,0.15); padding: 2px 8px; border-radius: 10px; }
+        .mockup-toggle {
+            width: 36px; height: 20px; background: #64748b;
+            border-radius: 10px; position: relative; display: inline-block;
+        }
+        .mockup-toggle.on { background: #3b82f6; }
+        .mockup-toggle::after {
+            content: ''; position: absolute;
+            width: 16px; height: 16px; background: white;
+            border-radius: 50%; top: 2px; left: 2px;
+        }
+        .mockup-toggle.on::after { left: 18px; }
+        .tap-hint {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: rgba(239,68,68,0.1);
+            border: 1px dashed rgba(239,68,68,0.4);
+            border-radius: 6px; padding: 4px 8px;
+            font-size: 11px; color: #fca5a5; margin-top: 6px;
+        }
+        .modal-footer { padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-fixed {
+            width: 100%; padding: 13px;
+            background: #10b981; color: white; border: none;
+            border-radius: 12px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .btn-fixed:hover { background: #059669; }
     </style>
 </head>
 <body>
@@ -308,13 +425,340 @@
             var targetUrl = "https://qr.mikroradius.com/";
             var ua = navigator.userAgent.toLowerCase();
             if (ua.indexOf("android") > -1) {
-                // Force open in Chrome, breaking out of captive portal mini-browser
                 window.location.href = "intent://qr.mikroradius.com/#Intent;scheme=https;package=com.android.chrome;end";
             } else {
-                // iOS: open in a new Safari tab, keeps login page intact
                 window.open(targetUrl, "_blank");
             }
         }
+    </script>
+
+    <!-- ===== RANDOMIZED MAC WARNING MODAL ===== -->
+    <div class="modal-backdrop" id="mac-modal">
+        <div class="modal">
+
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                </div>
+                <div class="modal-title">Randomized MAC Detected</div>
+                <div class="modal-subtitle">
+                    Your device is using a <strong>random MAC address</strong>. This prevents the hotspot from recognizing your device and will cause login issues.<br><br>
+                    Please disable it before connecting.
+                </div>
+            </div>
+
+            <!-- Device selector -->
+            <div class="device-tabs">
+                <button class="device-tab active" onclick="showGuide('iphone', this)">
+                    <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                    iPhone
+                </button>
+                <button class="device-tab" onclick="showGuide('android', this)">
+                    <svg viewBox="0 0 24 24"><path d="M17.523 15.341l-.847-1.467A6.97 6.97 0 0 0 19 9.5C19 5.91 16.09 3 12.5 3S6 5.91 6 9.5c0 1.71.62 3.27 1.641 4.476l-.849 1.47a.5.5 0 0 0 .433.75h.01l1.592-.025a7.01 7.01 0 0 0 3.173.829 7.01 7.01 0 0 0 3.173-.83l1.592.026h.01a.5.5 0 0 0 .433-.75l-.686-1.105zM12.5 5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z M8 17h9v2H8z M9 20h7v1H9z"/></svg>
+                    Android
+                </button>
+                <button class="device-tab" onclick="showGuide('pc', this)">
+                    <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                    Windows
+                </button>
+            </div>
+
+            <!-- iPhone Guide -->
+            <div class="guide-panel active" id="guide-iphone">
+
+                <div class="guide-step">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <div class="step-title">Open Settings</div>
+                        <div class="step-desc">Go to the <code>Settings</code> app on your iPhone.</div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <div class="step-title">Tap Wi-Fi</div>
+                        <div class="step-desc">Tap <code>Wi-Fi</code> in the list.</div>
+                        <div class="mockup">
+                            <div class="mockup-bar">
+                                <span>⚙️ Settings</span>
+                            </div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">📶 Wi-Fi</span>
+                                <span class="mockup-value hl">On ›</span>
+                            </div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">🔵 Bluetooth</span>
+                                <span class="mockup-value">On ›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <div class="step-title">Tap the ⓘ next to your network</div>
+                        <div class="step-desc">Find your Wi-Fi network name and tap the <code>ⓘ</code> info icon on the right.</div>
+                        <div class="mockup">
+                            <div class="mockup-bar"><span>Wi-Fi</span></div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">✓ YourNetwork</span>
+                                <span class="mockup-value hl">ⓘ</span>
+                            </div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">OtherNetwork</span>
+                                <span class="mockup-value">ⓘ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">4</div>
+                    <div class="step-body">
+                        <div class="step-title">Turn off Private Wi-Fi Address</div>
+                        <div class="step-desc">Scroll down and toggle <code>Private Wi-Fi Address</code> to <strong>Off</strong>. Confirm when prompted.</div>
+                        <div class="mockup">
+                            <div class="mockup-row">
+                                <span class="mockup-label">Private Wi-Fi Address</span>
+                                <span class="mockup-toggle on" id="iphone-toggle" onclick="this.classList.remove('on')"></span>
+                            </div>
+                            <div class="tap-hint">
+                                <svg viewBox="0 0 24 24"><path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/></svg>
+                                Tap the toggle to turn it OFF
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">5</div>
+                    <div class="step-body">
+                        <div class="step-title">Reconnect to Wi-Fi</div>
+                        <div class="step-desc">Your device will disconnect briefly. Reconnect to the same network and open the browser again.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Android Guide -->
+            <div class="guide-panel" id="guide-android">
+
+                <div class="guide-step">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <div class="step-title">Open Settings</div>
+                        <div class="step-desc">Open the <code>Settings</code> app on your Android device.</div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <div class="step-title">Go to Network &amp; Internet → Wi-Fi</div>
+                        <div class="step-desc">Tap <code>Network &amp; Internet</code> then tap <code>Wi-Fi</code>.</div>
+                        <div class="mockup">
+                            <div class="mockup-bar"><span>⚙️ Settings</span></div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">📶 Network &amp; Internet</span>
+                                <span class="mockup-value hl">›</span>
+                            </div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">🔵 Connected devices</span>
+                                <span class="mockup-value">›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <div class="step-title">Long press your network name</div>
+                        <div class="step-desc">Find your Wi-Fi network in the list and <strong>long press</strong> it, then tap <code>Modify network</code>.</div>
+                        <div class="mockup">
+                            <div class="mockup-bar"><span>Wi-Fi</span></div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">✓ YourNetwork</span>
+                                <span class="mockup-value hl">Long press ›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">4</div>
+                    <div class="step-body">
+                        <div class="step-title">Tap Advanced options</div>
+                        <div class="step-desc">In the network details, tap <code>Advanced options</code> to expand the section.</div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">5</div>
+                    <div class="step-body">
+                        <div class="step-title">Set MAC address type to "Device MAC"</div>
+                        <div class="step-desc">Find <code>Privacy</code> or <code>Randomized MAC</code> and change it to <code>Use device MAC</code>.</div>
+                        <div class="mockup">
+                            <div class="mockup-row">
+                                <span class="mockup-label">Privacy</span>
+                                <span class="mockup-value hl">Use device MAC</span>
+                            </div>
+                            <div class="tap-hint">
+                                <svg viewBox="0 0 24 24"><path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/></svg>
+                                Select "Use device MAC" from the dropdown
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">6</div>
+                    <div class="step-body">
+                        <div class="step-title">Save and reconnect</div>
+                        <div class="step-desc">Tap <code>Save</code>. Your device will reconnect with its real MAC address.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Windows Guide -->
+            <div class="guide-panel" id="guide-pc">
+
+                <div class="guide-step">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <div class="step-title">Open Settings</div>
+                        <div class="step-desc">Press <code>Windows + I</code> to open Settings.</div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <div class="step-title">Go to Network &amp; Internet → Wi-Fi</div>
+                        <div class="step-desc">Click <code>Network &amp; Internet</code> in the left sidebar, then click <code>Wi-Fi</code>.</div>
+                        <div class="mockup">
+                            <div class="mockup-bar"><span>⚙️ Settings</span></div>
+                            <div class="mockup-row">
+                                <span class="mockup-label">🌐 Network &amp; Internet</span>
+                                <span class="mockup-value hl">›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <div class="step-title">Click "Manage known networks"</div>
+                        <div class="step-desc">Under the Wi-Fi section, click <code>Manage known networks</code>.</div>
+                        <div class="mockup">
+                            <div class="mockup-row">
+                                <span class="mockup-label">Wi-Fi</span>
+                                <span class="mockup-value hl">Manage known networks ›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">4</div>
+                    <div class="step-body">
+                        <div class="step-title">Click your network → Properties</div>
+                        <div class="step-desc">Find your network name and click <code>Properties</code>.</div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">5</div>
+                    <div class="step-body">
+                        <div class="step-title">Set Random hardware addresses to "Off"</div>
+                        <div class="step-desc">Find <code>Random hardware addresses</code> and change it to <code>Off</code>.</div>
+                        <div class="mockup">
+                            <div class="mockup-row">
+                                <span class="mockup-label">Random hardware addresses</span>
+                                <span class="mockup-value hl">Off</span>
+                            </div>
+                            <div class="tap-hint">
+                                <svg viewBox="0 0 24 24"><path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/></svg>
+                                Use the dropdown and select "Off"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">6</div>
+                    <div class="step-body">
+                        <div class="step-title">Disconnect &amp; reconnect</div>
+                        <div class="step-desc">Disconnect from the Wi-Fi network and reconnect. Then open your browser again.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-fixed" onclick="reconnectAfterFix()">✓ I've disabled it — Reconnect Now</button>
+                <p style="font-size:11px;color:#64748b;text-align:center;margin-top:4px;">You must disable the randomized MAC and reconnect to continue.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        /* ---- MAC RANDOMIZATION CHECK ---- */
+        /* MikroTik injects the real MAC via $(mac). A locally administered
+           (randomized) MAC has bit 1 of the first octet set.
+           e.g. first byte is 02,06,0A,0E,12,16,1A,1E,22,26... */
+        (function() {
+            var mac = '$(mac)';
+            if (!mac || mac.indexOf('$') !== -1) return; // template not rendered yet
+
+            var firstByte = parseInt(mac.split(':')[0], 16);
+            var isRandomized = (firstByte & 0x02) !== 0;
+
+            if (isRandomized) {
+                // Auto-detect device type for default tab
+                var ua = navigator.userAgent.toLowerCase();
+                var defaultDevice = 'iphone';
+                if (ua.indexOf('android') > -1) defaultDevice = 'android';
+                else if (ua.indexOf('windows') > -1) defaultDevice = 'pc';
+                else if (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1) defaultDevice = 'iphone';
+
+                // Show the right guide tab by default
+                showGuide(defaultDevice, document.querySelector('.device-tab'));
+                // Activate the correct tab button
+                var tabs = document.querySelectorAll('.device-tab');
+                var map = { iphone: 0, android: 1, pc: 2 };
+                tabs.forEach(function(t) { t.classList.remove('active'); });
+                if (tabs[map[defaultDevice]]) tabs[map[defaultDevice]].classList.add('active');
+
+                document.getElementById('mac-modal').classList.add('open');
+            }
+        })();
+
+        function showGuide(device, btn) {
+            document.querySelectorAll('.guide-panel').forEach(function(p) { p.classList.remove('active'); });
+            document.querySelectorAll('.device-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.getElementById('guide-' + device).classList.add('active');
+            if (btn) btn.classList.add('active');
+        }
+
+        function reconnectAfterFix() {
+            // Reload the login page — if they've reconnected with real MAC,
+            // the new $(mac) will pass the check and the modal won't appear
+            window.location.reload();
+        }
+
+        // Prevent closing modal by clicking outside or pressing Escape
+        document.getElementById('mac-modal').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') e.preventDefault();
+        });
     </script>
 </body>
 </html>
